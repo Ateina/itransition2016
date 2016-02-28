@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>brainfuck interpreter</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../Content/tracer.css" type="text/css" />
+</head>
+<body>
+    <p></p>
+    <p></p>
+    <div class="container" ng-controller="brainfuckController">
+        <div class="col-md-4">
+            <input type="file" id="code" name="file" /><p></p>
+            <p>Load new file</p>
+            <p><button class="btn btn-success btn-md" ng-click="load()">load</button></p>
+            <p>Or save code as new file</p>
+            <a id="displayText" href="javascript:toggle1();" class="btn btn-success btn-md" ng-click="create()">Save file</a>
+            <p></p>
+            <ul class="unstyled">
+                <li ng-repeat="file in fileList">
+                    <button class="btn btn-success btn-md" ng-click="load()">Open</button>
+                    <button class="btn btn-success btn-md" ng-click="delete()">Delete</button>
+                    <button class="btn btn-success btn-md" ng-click="rename()">Rename</button>
+                    <a id="displayText" href="javascript:toggle2();" class="btn btn-success btn-md" ng-click="edit()">Edit</a>
+                    <span>{{file.name}}</span>
+                </li>
+            </ul>
+            <table id="toggleText1" style="display: none">
+                <tr>
+                    <td>Name of file:</td>
+                    <td><input id="inputFileNameToSaveAs"></td>
+                    <td><button ng-click="saveTextAsFile()">Save Text to File</button></td>
+                </tr>
+            </table>
+
+            <p>Write index, that you want to change</p>
+            <table>
+                <tr>
+
+                    <td><input id="indexOfCell"></td>
+                    <td><button ng-click="check()">CHECK CHANGES</button></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="col-md-6">
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <a href="javascript:void(0);" class="btn btn-success btn-md" ng-hide="isRunning" ng-disabled="isFinished" ng-click="run();">
+                        <i class="icon-play"></i>
+                        <span ng-hide="isStarted">Run</span>
+                        <span ng-show="isStarted">Continue</span>
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-md" ng-show="isRunning" ng-click="pause();">
+                        <i class="icon-pause"></i>
+                        Pause
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-md" ng-disabled="isRunning || isFinished" ng-click="next();">
+                        <i class="icon-arrow-right"></i>
+                        Step-by-step
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-md" ng-show="isRunning" ng-click="moveToBreakpoint();">
+                        <i class="icon-pause"></i>
+                        Breakpoints
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-md" ng-click="reset();">
+                        <i class="icon-refresh"></i>
+                        Reset
+                    </a>
+                </div>
+            </div>
+            <!-- Code -->
+            <div class="panel panel-default">
+                code
+                <div class="panel-body">
+                    <textarea id="txtCode" ng-model="code" ng-trim="false" ng-disabled="isStarted"
+                              ng-selection-start="codePointer" ng-init="code=load and open file with code. if you want some breakpoints ->
+                        add # to your code" ng-selection-end="codePointer + 1">{{code}}
+                    </textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6">
+                    <!-- Input -->
+                    <div class="panel panel-default">
+                       input
+                        <div class="panel-body">
+                            <div id="input">
+                                <span ng-repeat="char in standardInput">{{char}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <!-- Output -->
+                    <div class="panel panel-default" id="standard-output">
+                        output
+                        <div class="panel-body">
+                            <div id="output">
+                                <span ng-repeat="char in standardOutput">{{char}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Memory -->
+        <div class="col-md-2">
+            <div class="panel panel-default" id="memoryCounter">
+                <div class="panel-body">
+                    <div id="memory" class="clearfix">
+                        <div class="memory-cell" ng-click="checkChanges($index)" current="{{$index == memoryPointer}}" ng-repeat="cell in memory">[{{$index + 1}}] : {{cell}} : </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/angular-1.0.8.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/js/controller.js"></script>
+    <script type="text/javascript" src="../../Scripts/js/file-saver.js"></script>
+</body>
+</html>
