@@ -1,0 +1,64 @@
+﻿<hr />
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-primary" id="panelLatestMovies">
+            <div class="panel-heading">
+                <h3 class="panel-title">Latest Materials Released</h3>
+            </div>
+            <div class="panel-body">
+                <div ng-if="loadingMaterials">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading materials...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div class="col-xs-12 col-sm-6 movie" ng-repeat="material in latestMaterials">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{{material.Title}} </strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="media">
+                                <a class="pull-left" href="#">
+                                    <div class="fancybox pull-left" rel="gallery1" href="../../Content/images/materials/{{material.Image}}" title="{{material.Description | limitTo:200}}">
+                                        <img class="media-object" height="120" ng-src="../../Content/images/materials/{{material.Image}}" alt="" />
+                                    </div>
+                                </a>
+                                <div class="media-body">
+                                    <div><small>{{material.Description | limitTo: 70}}...</small></div>
+                                    <label class="label label-info">{{material.Category}}</label><br />
+                                </div>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <span component-rating="{{material.Rating}}"></span>
+                            <!--там где материал.Автор сделать ссылку href="ссылка на профиль юзера"-->
+                            <a class="fancybox-media pull-right">{{material.Author}}<i class="fa fa-video-camera fa-fw"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-success" id="panelMovieGenres">
+            <div class="panel-heading">
+                <h3 class="panel-title">Study Categories</h3>
+            </div>
+            <div class="panel-body">
+                <div ng-if="loadingCategories">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading Categories..</label></div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div id="genres-bar"></div>
+            </div>
+            <div class="panel-footer">
+                <p class="text-center"><em>Wanna add a new Material? Head over to the add movie form.</em></p>
+                <p class="text-center"><a ng-href="#/materials/add" class="btn btn-default">Add new Material</a></p>
+            </div>
+        </div>
+    </div>
+</div>

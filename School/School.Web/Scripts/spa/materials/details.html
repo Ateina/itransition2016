@@ -1,0 +1,48 @@
+﻿<hr />
+<div class="jumbotron">
+    <div class="container text-center">
+        <img alt="{{material.Title}}" ng-src="../../../Content/images/materials/{{material.Image}}" class="pull-left" height="120" />
+        <div class="materialDescription"><i><i class="fa fa-quote-left"></i>{{material.Description}}<i class="fa fa-quote-right"></i></i></div>
+        <br />
+    </div> <!-- end container -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h5>{{material.Title}}</h5>
+            </div>
+            <div class="panel-body" ng-if="!loadingMaterials">
+                <div class="media">
+                    <a class="pull-right" ng-href="#/materials/{{material.ID}}" title="View {{material.Title}} details">
+                        <img class="media-object" height="120" ng-src="../../Content/images/materials/{{material.Image}}" alt="" />
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{material.Title}}</h4>
+                        Author : <label>{{material.Author}}</label><br />
+                        Content: <label>{{material.Content}}</label><br />
+                        Rating: <span component-rating='{{material.Rating}}'></span>
+                        <br />
+                        <label class="label label-info">{{material.Category}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer clearfix" ng-if="!loadingMaterials">
+                <div class="pull-right">
+                    <a ng-href="{{material.TrailerURI}}" class="btn btn-primary fancybox-media">View Trailer <i class="fa fa-video-camera pull-right"></i></a>
+                    <a ng-href="#/materials/edit/{{material.ID}}" class="btn btn-default">Edit material <i class="fa fa-pencil-square pull-right"></i></a>
+                </div>
+            </div>
+            <div ng-if="loadingMaterials">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Loading material data...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>

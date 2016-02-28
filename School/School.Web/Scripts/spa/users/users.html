@@ -1,0 +1,59 @@
+﻿<div class="row">
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Users</h4>
+            <div class="input-group">
+                <input id="inputSearchCustomers" type="search" ng-model="filterUsers" class="form-control shortInputSearch" placeholder="Filter, search users..">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" ng-click="search();"><i class="glyphicon glyphicon-search"></i></button>
+                    <button class="btn btn-primary" ng-click="clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6" ng-repeat="user in Users | filter:filterUsers">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="fancybox-media pull-right" ng-href="#/users/{{user.ID}}" title="View {{user.Username}} profile">{{material.Author}}<i class="fa fa-user fa-fw"></i></a>
+                            <strong>{{user.Username}}</strong><br />
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-condensed shortMargin">
+                                    <tr>
+                                        <td class="shortPadding">Email:</td>
+                                        <td class="shortPadding"><i>{{user.Email}}</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="shortPadding">City:</td>
+                                        <td class="shortPadding"><i>{{user.City}}</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="shortPadding">Birth:</td>
+                                        <td class="shortPadding"><i>{{user.DateOfBirth | date:'mediumDate'}}</i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="shortPadding">Registered:</td>
+                                        <td class="shortPadding"><i>{{user.RegistrationDate | date:'mediumDate'}}</i></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-footer clearfix">
+                            <div class="pull-right">
+                                <button class="btn btn-primary btn-xs" ng-click="openEditDialog(user);">Edit <i class="fa fa-pencil pull-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-center">
+                <custom-pager page="{{page}}" pages-count="{{pagesCount}}" total-count="{{totalCount}}" search-func="search(page)"></custom-pager>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+﻿<style>
+    .menuBtn {
+        background-color: transparent;
+        border: none;
+        height: 38px;
+        margin: 16px;
+        position: absolute;
+        width: 36px;
+    }
+
+    md-toolbar h1 {
+        font-size: 1.250em;
+        font-weight: 400;
+        margin: auto;
+    }
+
+    .muppet-list .md-button {
+        color: inherit;
+        font-weight: 500;
+        text-align: left;
+        width: 100%;
+    }
+
+    .muppet-list .selected {
+        color: #03a9f4;
+    }
+
+    .face {
+        border-radius: 30px;
+        border: 1px solid #ddd;
+        display: inline-block;
+        margin: 4px 16px;
+        vertical-align: middle;
+        width: 48px;
+    }
+
+    .content-wrapper {
+        position: relative;
+    }
+
+    #primary-col {
+        overflow: hidden;
+    }
+
+        #primary-col .md-button {
+            margin: 8px auto 16px 0;
+        }
+
+        #primary-col .cell {
+            flex: 1 1 auto;
+        }
+
+        #primary-col img {
+            display: block;
+            max-width: 100%;
+        }
+
+    /* Utils */
+    .visuallyhidden {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    /* Using Data-URI converted from svg until <md-icon> becomes available 
+https://github.com/google/material-design-icons
+*/
+    .menuBtn {
+        background: transparent url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGcgaWQ9IkhlYWRlciI+CiAgICA8Zz4KICAgICAgICA8cmVjdCB4PSItNjE4IiB5PSItMjIzMiIgZmlsbD0ibm9uZSIgd2lkdGg9IjE0MDAiIGhlaWdodD0iMzYwMCIvPgogICAgPC9nPgo8L2c+CjxnIGlkPSJMYWJlbCI+CjwvZz4KPGcgaWQ9Ikljb24iPgogICAgPGc+CiAgICAgICAgPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+CiAgICAgICAgPHBhdGggZD0iTTMsMThoMTh2LTJIM1YxOHogTTMsMTNoMTh2LTJIM1YxM3ogTTMsNnYyaDE4VjZIM3oiIHN0eWxlPSJmaWxsOiNmM2YzZjM7Ii8+CiAgICA8L2c+CjwvZz4KPGcgaWQ9IkdyaWQiIGRpc3BsYXk9Im5vbmUiPgogICAgPGcgZGlzcGxheT0iaW5saW5lIj4KICAgIDwvZz4KPC9nPgo8L3N2Zz4=) no-repeat center center;
+    }
+</style>
+
+<script>
+    var app = angular.module('common.ui', ['ngMaterial']);
+
+    Config.$inject = ['$mdThemingProvider'];
+    function Config($mdThemingProvider) {
+
+        // Create the other theme options
+        var themes = ThemeService();
+        for (var index = 0; index < themes.length; ++index) {
+            console.log(themes[index] + '-theme');
+
+            $mdThemingProvider.theme(themes[index] + '-theme')
+              .primaryPalette(themes[index]);
+        }
+
+        $mdThemingProvider.alwaysWatchTheme(true);
+
+    };
+
+    app.config(Config);
+
+    function ThemeService() {
+        var themes = [
+          'red',
+          'pink',
+          'purple',
+          'deep-purple',
+          'indigo',
+          'blue',
+          'light-blue',
+          'cyan',
+          'teal',
+          'green',
+          'light-green',
+          'lime',
+          'yellow',
+          'amber',
+          'orange',
+          'deep-orange',
+          'brown',
+          'grey',
+          'blue-grey'
+        ];
+
+        return themes;
+    }
+
+    app.controller('AppCtrl', ['$scope', '$mdSidenav', 'muppetService', '$timeout', '$log', function ($scope, $mdSidenav, muppetService, $timeout, $log) {
+        var allMuppets = [];
+
+        $scope.selected = null;
+        $scope.muppets = allMuppets;
+        $scope.selectMuppet = selectMuppet;
+        $scope.toggleSidenav = toggleSidenav;
+
+
+        $scope.theme = 'default';
+        $scope.themeList = ThemeService();
+
+        console.log('Current Theme', $scope.theme, $scope.themeList);
+
+        $scope.$watch('selectedTheme', function (value) {
+            if (value != undefined) {
+                $scope.theme = value + '-theme';
+                console.log('Changed theme', $scope.theme, value);
+                //$scope.$apply();
+                //$scope.$digest();
+            }
+        });
+
+
+        loadMuppets();
+    }])
+</script>
+
+<!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angular_material/0.8.2/angular-material.js"></script>-->
+
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand active" href="#/">Study Project</a>
+    </div>
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li><button ng-click="toggleLang()">Toggle Language</button></li>
+            <!--<li><md-content><md-select ng-model="selectedTheme" placeholder="Select a theme">
+        <md-option ng-value="themeName" ng-repeat="themeName in themeList" ng-selected="themeName == theme">{{ themeName }}</md-option>
+    </md-select></md-content></li>-->
+        </ul>
+        <ul class="nav navbar-nav navbar-right" ng-if="userData.isUserLoggedIn">
+            <li class="userinfo"><a href="#/">{{username}}<i class="fa fa-user fa-fw"></i></a></li>
+        </ul>
+    </div>
+</div>

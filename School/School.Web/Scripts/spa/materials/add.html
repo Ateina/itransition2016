@@ -1,0 +1,290 @@
+﻿<script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+        async defer></script>
+<script>
+    function initMap() {
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+            center: { lat: 44.540, lng: -78.546 },
+            zoom: 8
+        });
+    }
+</script>
+
+<style>
+    .korpus > div, .korpus > input {
+        display: none;
+    }
+
+    .korpus label {
+        padding: 5px;
+        border: 1px solid #aaa;
+        line-height: 28px;
+        cursor: pointer;
+        position: relative;
+        bottom: 1px;
+        background: #337AB7;
+    }
+
+    .korpus input[type="radio"]:checked + label {
+        border-bottom: 2px solid #fff;
+    }
+
+    .korpus > input:nth-of-type(1):checked ~ div:nth-of-type(1),
+    .korpus > input:nth-of-type(2):checked ~ div:nth-of-type(2),
+    .korpus > input:nth-of-type(3):checked ~ div:nth-of-type(3) {
+        display: block;
+        padding: 5px;
+        border: 1px solid #aaa;
+    }
+
+    #map {
+        width: 500px;
+        height: 400px;
+    }
+</style>
+
+<div id="editMovieWrapper">
+    <hr>
+
+    <div class="korpus">
+        <input type="radio" name="odin" checked="checked" id="vkl1" /><label for="vkl1">Templete 1</label><input type="radio" name="odin" id="vkl2" /><label for="vkl2">Template 2</label><input type="radio" name="odin" id="vkl3" /><label for="vkl3">Template 3</label>
+       <!--Template 1-->
+         <div class="row">
+            <!-- left column -->
+            <div class="col-xs-3">
+                <div class="text-center">
+                    <img ng-src="../../Content/images/materials/unknown.jpg" class="avatar img-responsive" alt="avatar">
+                    <h6>Add photo...</h6>
+
+                    <input type="file" ng-file-select="prepareFiles($files)">
+                </div>
+            </div>
+
+            <!-- edit form column -->
+            <div class="col-xs-9 personal-info">
+                <form class="form-horizontal" role="form" novalidate angular-validator name="addMaterialForm" angular-validator-submit="AddMaterial()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6">
+                                <label class="control-label">Material title</label>
+                                <input class="form-control" name="title" type="text" ng-model="material.Title"
+                                       validate-on="blur" required required-message="'Material title is required'">
+                            </div>
+
+                            <div class="col-xs-6 col-sm-6 selectContainer">
+                                <label class="control-label">Category</label>
+                                <select ng-model="material.CategoryId" class="form-control black" ng-options="option.ID as option.Name for option in categories" required></select>
+                                <input type="hidden" name="CategoryId" ng-value="material.CategoryId" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Author</label>
+                                <input class="form-control" type="text" ng-model="material.Author" name="author"
+                                       validate-on="blur" required required-message="'Movie author is required'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label class="control-label">Create Date</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" name="CreateDate" datepicker-popup="{{format}}" ng-model="material.CreateData" is-open="datepicker.opened" datepicker-options="dateOptions" ng-required="true" datepicker-append-to-body="true" close-text="Close"
+                                           validate-on="blur" required required-message="'Date Released is required'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Description</label>
+                        <textarea class="form-control" ng-model="material.Description" name="description" rows="3"
+                                  validate-on="blur" required required-message="'Movie description is required'" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Content</label>
+                        <textarea class="form-control" ng-model="material.Content" name="content" rows="9"
+                                  validate-on="blur" required required-message="'Movie content is required'" />
+                    </div>
+
+                    <br />
+                    <div class="form-group col-xs-4">
+                        <label class="control-label"></label>
+                        <div class="">
+                            <input type="submit" class="btn btn-primary" value="Submit material" />
+                            <span></span>
+                            <a class="btn btn-default" ng-href="#/material/{{material.ID}}">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--Template 2-->
+        <div class="row">
+            <!-- left column -->
+            <!-- edit form column -->
+            <div class="col-xs-12 personal-info">
+                <form class="form-horizontal" role="form" novalidate angular-validator name="addMaterialForm" angular-validator-submit="AddMaterial()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6">
+                                <label class="control-label">Material title</label>
+                                <input class="form-control" name="title" type="text" ng-model="material.Title"
+                                       validate-on="blur" required required-message="'Material title is required'">
+                            </div>
+
+                            <div class="col-xs-6 col-sm-6 selectContainer">
+                                <label class="control-label">Category</label>
+                                <select ng-model="material.CategoryId" class="form-control black" ng-options="option.ID as option.Name for option in categories" required></select>
+                                <input type="hidden" name="CategoryId" ng-value="material.CategoryId" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Author</label>
+                                <input class="form-control" type="text" ng-model="material.Author" name="author"
+                                       validate-on="blur" required required-message="'Movie author is required'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label class="control-label">Create Date</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" name="CreateDate" datepicker-popup="{{format}}" ng-model="material.CreateData" is-open="datepicker.opened" datepicker-options="dateOptions" ng-required="true" datepicker-append-to-body="true" close-text="Close"
+                                           validate-on="blur" required required-message="'Date Released is required'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <label class="control-label">Youtube trailer</label>
+                                <input class="form-control" type="text" ng-model="material.TrailerURI" name="trailerURI"
+                                       validate-on="blur" required required-message="'Movie trailer is required'" ng-pattern="/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/"
+                                       invalid-message="'You must enter a valid YouTube URL'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Description</label>
+                        <textarea class="form-control" ng-model="material.Description" name="description" rows="3"
+                                  validate-on="blur" required required-message="'Movie description is required'" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Content</label>
+                        <textarea class="form-control" ng-model="material.Content" name="content" rows="9"
+                                  validate-on="blur" required required-message="'Movie content is required'" />
+                    </div>
+
+                    <br />
+                    <div class="form-group col-xs-4">
+                        <label class="control-label"></label>
+                        <div class="">
+                            <input type="submit" class="btn btn-primary" value="Submit material" />
+                            <span></span>
+                            <a class="btn btn-default" ng-href="#/material/{{material.ID}}">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--Template 3-->
+        <div class="row">
+            <!-- left column -->
+            <!-- edit form column -->
+            <div class="col-xs-12 personal-info">
+                <form class="form-horizontal" role="form" novalidate angular-validator name="addMaterialForm" angular-validator-submit="AddMaterial()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6">
+                                <label class="control-label">Material title</label>
+                                <input class="form-control" name="title" type="text" ng-model="material.Title"
+                                       validate-on="blur" required required-message="'Material title is required'">
+                            </div>
+
+                            <div class="col-xs-6 col-sm-6 selectContainer">
+                                <label class="control-label">Category</label>
+                                <select ng-model="material.CategoryId" class="form-control black" ng-options="option.ID as option.Name for option in categories" required></select>
+                                <input type="hidden" name="CategoryId" ng-value="material.CategoryId" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Author</label>
+                                <input class="form-control" type="text" ng-model="material.Author" name="author"
+                                       validate-on="blur" required required-message="'Movie author is required'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label class="control-label">Create Date</label>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" name="CreateDate" datepicker-popup="{{format}}" ng-model="material.CreateData" is-open="datepicker.opened" datepicker-options="dateOptions" ng-required="true" datepicker-append-to-body="true" close-text="Close"
+                                           validate-on="blur" required required-message="'Date Released is required'" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-xs-6" id="map">
+                                <label class="control-label">Google maps</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Description</label>
+                        <textarea class="form-control" ng-model="material.Description" name="description" rows="3"
+                                  validate-on="blur" required required-message="'Movie description is required'" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Content</label>
+                        <textarea class="form-control" ng-model="material.Content" name="content" rows="9"
+                                  validate-on="blur" required required-message="'Movie content is required'" />
+                    </div>
+
+                    <br />
+                    <div class="form-group col-xs-4">
+                        <label class="control-label"></label>
+                        <div class="">
+                            <input type="submit" class="btn btn-primary" value="Submit material" />
+                            <span></span>
+                            <a class="btn btn-default" ng-href="#/material/{{material.ID}}">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+  
+    <hr>
+</div>
