@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Draw";
+}
+<!doctype html>
+<html class="no-js" ng-app="pw.canvas-painter">
+<head>
+    <title>WebPaint</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height">
+
+    <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/dist/angular-canvas-painter.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/ng-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/ng-file-upload.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/js/button-script.js"></script>
+    <script type="text/javascript" src="../../Scripts/js/dropImage.js"></script>
+    <script>
+        var onDoubleClick = function ($event) {
+            var mousePos = getMousePos($event);
+            var canvas = document.getElementById('pwCanvasMain');
+            var context = canvas.getContext('2d');
+
+            var img = new Image();
+            img.src = document.getElementById('imageForSave').value;
+            img.onload = function () {
+                img.width /= 4;
+                img.height /= 4;
+                context.drawImage(img, mousePos.x - img.width / 2, mousePos.y - img.height / 2, img.width, img.height);
+            }
+        };
+    </script>
+        <link rel="stylesheet" href="../../Content/Site.css" type="text/css">
+</head>
+<body ng-app="pw.canvas-painter">
+
+    <div class="container" ng-controller="MainController as ctrl">
+
+        <div class="col-md-3">
+            <div class="drop-class">DROP</div>
+            <input style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">
+            <p></p>
+            <p></p>
+            <p>Or load image from the internet</p>
+            <input id="imageForSave">
+            <a id="link">It's online!!!</a>
+        </div>
+
+        <div class="col-md-3">
+            <div pw-color-selector="['#F5F5DC', '#FFD700', '#CD0000', '#008B00', '#0000CD', '#00E5EE','#8B1C62', '#1C1C1C']" color="selectedColor"></div>
+            <input type="range" min="1" max="3" ng-model="selectedLineWidth" class="lineWidthSelector">{{selectedLineWidth}}
+
+            <div class="undo">
+                <button ng-click="ctrl.clear()"
+                        ng-disabled="ctrl.version < 1">
+                    Clear
+                </button>
+            </div>
+
+            <div><a id="download">Download as image</a></div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div pw-canvas
+                 version="ctrl.version"
+                 ondblclick="onDoubleClick()"
+                 options="{undo: true, width: 600, height: 400, color: selectedColor, lineWidth: selectedLineWidth*5}"></div>
+        </div>
+    </div>
+    <div id="addDiv"></div>
+</body>
+</html>
